@@ -1,0 +1,19 @@
+[2025-09-21 21:47:44,227][__main__][INFO] - Current working directory: /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers (ViT) from scratch
+[2025-09-21 21:47:44,227][__main__][INFO] - --- Configuration ---
+[2025-09-21 21:47:44,227][__main__][INFO] - 
+model:
+  in_channels: 3
+  image_size: 224
+  patch_size: 16
+  number_of_encoder: 6
+  embedding_dims: 256
+  d_ff_scale_factor: 4
+  heads: 8
+  input_dropout_rate: 0.1
+  attention_dropout_rate: 0.1
+  feed_forward_dropout_rate: 0.1
+  number_of_classes: 4
+train:
+  batch_size: 32
+
+[2025-09-21 21:47:44,227][__main__][INFO] - ---------------------

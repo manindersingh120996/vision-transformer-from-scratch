@@ -81,7 +81,7 @@ class ViTInputLayer(nn.Module):
         patch_embeddings = self.patch_embeddings(x)
         cls_token = self.cls_token.expand(batch_size,-1,-1)
         
-        return self.input_dropout(torch.concat((cls_token,patch_embeddings),dim=1) + self.positional_embeddings)
+        return self.dropout(torch.concat((cls_token,patch_embeddings),dim=1) + self.positional_embeddings)
         # print(cls_token[0][0][0],cls_token[1][0][0])
         # print(patch_embeddings.shape,cls_token.shape)
 
@@ -263,6 +263,26 @@ class Encoder(nn.Module):
         return x
     
 class VisionTransformer(nn.Module):
+    """
+    This funtion creates a Vision transformer moder
+
+    INPUT : 
+        args :
+        in_channels: int,
+                 image_size: int,
+                 patch_size: int,
+                 number_of_encoder: int,
+                 embeddings: int,
+                 d_ff_scale: int,
+                 heads: int,
+                 input_dropout_rate: float,
+                 attention_dropout_rate: float,
+                 feed_forward_dropout_rate: float,
+                 number_of_classes: int
+
+    Output: 
+        Vision Transformer model created with the configuraitons
+    """
     def __init__(self,
                  in_channels: int,
                  image_size: int,
@@ -299,4 +319,4 @@ class VisionTransformer(nn.Module):
         # print(x.shape)
         return self.classification_head(self.encoder_stack(self.input_layer(x))[:,0,:])
 
-  
+
