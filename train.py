@@ -4,12 +4,14 @@ import math
 from torchinfo import summary
 from torch.utils.data import DataLoader, Dataset
 import hydra
+from hydra.core.hydra_config import HydraConfig
 import os
 import pandas as pd
 import logging
 from omegaconf import DictConfig, OmegaConf
 import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
+import matplotlib.pyplot as plt
 
 
 from src import model,dataset
@@ -28,6 +30,7 @@ log = logging.getLogger(__name__)
 
 
 def dataset_creation(cfg: DictConfig):
+
     train_path = cfg.train_dataset_path
     val_path = cfg.test_dataset_path
     val_transform = dataset.val_transform
@@ -44,6 +47,38 @@ def dataset_creation(cfg: DictConfig):
                                  shuffle = False)
     return train_dataset,train_data_loader,val_dataset,val_data_loader
 
+def saving_training_plots(history_df,lr, output_dir):
+    """
+    Function to store train vs. val loss and train vs. val accuracy.
+
+    Input : history df with columns 
+                'train loss','train acc','val loss','val acc','learning rate'
+    Output : NONe
+        
+    """
+    plt.style.use("seaborn-v0_8-whitegrid")
+    fig, ax = plt.subplots(1,3, figsize=(15,5))
+    ax[0].plot(history_df["train loss"], label="Train Loss")
+    ax[0].plot(history_df["val loss"], label="Validation Loss")
+    ax[0].set_title("Loss Curves")
+    ax[0].set_xlabel("Epoch")
+    ax[0].legend()
+
+    ax[1].plot(history_df["train acc"], label="Train Accuracy")
+    ax[1].plot(history_df["val acc"], label="Validation Accuracy")
+    ax[1].set_title("Accuracy Curves")
+    ax[1].set_xlabel("Epoch")
+    ax[1].legend()
+
+    ax[2].plot(lr, label="Learning rate per step")
+    ax[2].set_title("Learning Rate Curve")
+    ax[2].set_xlabel("steps")
+    ax[2].legend()
+
+    plot_path = os.path.join(output_dir, "training_curves.png")
+    fig.savefig(plot_path)
+    log.info(f"Saved training plot to {plot_path}")
+
 
 
 
@@ -55,7 +90,9 @@ def main_loop(cfg: DictConfig):
 
     print(f"Current working directory: {os.getcwd()}")
     print(OmegaConf.to_yaml(cfg))
-    log.info(f"Current working directory: {os.getcwd()}")
+    output_dir = HydraConfig.get().runtime.output_dir
+    log.info(f"All artifacts will be saved to: {output_dir}")
+    # log.info(f"Current working directory: {os.getcwd()}")
     log.info("--- Configuration ---")
     log.info(f"\n{OmegaConf.to_yaml(cfg)}")
     log.info("---------------------")
@@ -101,7 +138,7 @@ def main_loop(cfg: DictConfig):
                              cfg.model.image_size,
                              cfg.model.image_size)).to(device)
     log.info("Model Creation Completed.")
-    print(summary(vit_model,input_data= test_input))
+    # print(summary(vit_model,input_data= test_input))
     log.info("--- Model Summary ---")
     log.info(summary(vit_model, input_data=test_input))
     log.info("--------------------")
@@ -127,7 +164,7 @@ def main_loop(cfg: DictConfig):
         progress = float(current_step - num_warmup_steps) / float(max(1, total_training_steps - num_warmup_steps))
         return max(0.0, 0.5 * (1.0 + math.cos(math.pi * progress)))
 
-    
+    # below is optimizwer and loss function setup
     total_training_steps = cfg.train.epochs * len(train_data_loader)
     
     num_warmup_steps = int(0.23 * total_training_steps)
@@ -200,17 +237,33 @@ def main_loop(cfg: DictConfig):
     
 
     
-        print(
-        f"Epoch {epoch+1} | "
-        f"train_loss: {epoch_avg_loss:.4f} | train_accuracy: {epoch_avg_accuracy:.4f} | "
-        f"val_loss: {val_epoch_avg_loss:.4f} | val_accuracy: {val_epoch_avg_accuracy:.4f} | "
-        f"LR: {scheduler.get_last_lr()[0]:.6f}"
-    )
+    #     print(
+    #     f"Epoch {epoch+1} | "
+    #     f"train_loss: {epoch_avg_loss:.4f} | train_accuracy: {epoch_avg_accuracy:.4f} | "
+    #     f"val_loss: {val_epoch_avg_loss:.4f} | val_accuracy: {val_epoch_avg_accuracy:.4f} | "
+    #     f"LR: {scheduler.get_last_lr()[0]:.6f}"
+    # )
         log.info(f"Epoch {epoch+1} | "
         f"train_loss: {epoch_avg_loss:.4f} | train_accuracy: {epoch_avg_accuracy:.4f} | "
         f"val_loss: {val_epoch_avg_loss:.4f} | val_accuracy: {val_epoch_avg_accuracy:.4f} | "
         f"LR: {scheduler.get_last_lr()[0]:.6f}")
     learning_rates.append(scheduler.get_last_lr()[0])
+
+    log.info("Storing the training artifacts detials")
+
+    data = list(zip(train_loss,train_acc,val_loss,val_acc))
+    df = pd.DataFrame(data,columns=['train loss','train acc','val loss','val acc'])
+    
+    csv_path = os.path.join(output_dir, "training_history.csv")
+    df.to_csv(csv_path,index_label="epoch")
+    log.info("WOrking on Training Plots...")
+    saving_training_plots(df,learning_rates,output_dir)
+    df = {'learning_rates_per_step':learning_rates}
+    df = pd.DataFrame(df)
+    csv_path = os.path.join(output_dir, "learning_rates_per_step.csv")
+    df.to_csv(csv_path,index_label="steps")
+
+    log.info(f"😎 Training Completed, details stored in {output_dir}")
     
                 
             

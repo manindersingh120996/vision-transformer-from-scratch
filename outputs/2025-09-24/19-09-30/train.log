@@ -1,0 +1,76 @@
+[2025-09-24 19:09:30,325][__main__][INFO] - All artifacts will be saved to: /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers (ViT) from scratch/outputs/2025-09-24/19-09-30
+[2025-09-24 19:09:30,325][__main__][INFO] - --- Configuration ---
+[2025-09-24 19:09:30,326][__main__][INFO] - 
+model:
+  in_channels: 3
+  image_size: 224
+  patch_size: 16
+  number_of_encoder: 6
+  embedding_dims: 256
+  d_ff_scale_factor: 4
+  heads: 8
+  input_dropout_rate: 0.1
+  attention_dropout_rate: 0.1
+  feed_forward_dropout_rate: 0.1
+  number_of_classes: 4
+train:
+  batch_size: 32
+  epochs: 10
+  train_dataset_path: dataset_path/tom_and_jerry/subset/train
+  test_dataset_path: dataset_path/tom_and_jerry/subset/test
+
+[2025-09-24 19:09:30,326][__main__][INFO] - ---------------------
+[2025-09-24 19:09:30,326][__main__][INFO] - Dataset Creation Begin
+[2025-09-24 19:09:30,328][__main__][INFO] -  Dataset Created 
+[2025-09-24 19:09:30,328][__main__][INFO] - Dataset Classes and Corresponding Labels : {'tom': 0, 'neither_tom_nor_jerry': 1, 'jerry': 2, 'both_tom_and_jerry': 3}
+[2025-09-24 19:09:30,328][__main__][INFO] - Verifying consistency between config and dataset...
+[2025-09-24 19:09:30,328][__main__][INFO] - ✅ Verification successful.
+[2025-09-24 19:09:30,328][__main__][INFO] - Model Creation Begin
+[2025-09-24 19:09:30,466][__main__][INFO] - Model Creation Completed.
+[2025-09-24 19:09:30,466][__main__][INFO] - --- Model Summary ---
+[2025-09-24 19:09:30,622][__main__][INFO] - ===============================================================================================
+Layer (type:depth-idx)                        Output Shape              Param #
+===============================================================================================
+VisionTransformer                             [32, 4]                   --
+├─ViTInputLayer: 1-1                          [32, 197, 256]            50,688
+│    └─PatchCreation: 2-1                     [32, 196, 256]            --
+│    │    └─Conv2d: 3-1                       [32, 256, 14, 14]         196,864
+│    └─Dropout: 2-2                           [32, 197, 256]            --
+├─Encoder: 1-2                                [32, 197, 256]            --
+│    └─ModuleList: 2-3                        --                        --
+│    │    └─EncoderBlock: 3-2                 [32, 197, 256]            789,760
+│    │    └─EncoderBlock: 3-3                 [32, 197, 256]            789,760
+│    │    └─EncoderBlock: 3-4                 [32, 197, 256]            789,760
+│    │    └─EncoderBlock: 3-5                 [32, 197, 256]            789,760
+│    │    └─EncoderBlock: 3-6                 [32, 197, 256]            789,760
+│    │    └─EncoderBlock: 3-7                 [32, 197, 256]            789,760
+├─Sequential: 1-3                             [32, 4]                   --
+│    └─LayerNorm: 2-4                         [32, 256]                 512
+│    └─Linear: 2-5                            [32, 4]                   1,028
+===============================================================================================
+Total params: 4,987,652
+Trainable params: 4,987,652
+Non-trainable params: 0
+Total mult-adds (G): 1.39
+===============================================================================================
+Input size (MB): 19.27
+Forward/backward pass size (MB): 865.01
+Params size (MB): 19.75
+Estimated Total Size (MB): 904.03
+===============================================================================================
+[2025-09-24 19:09:30,624][__main__][INFO] - --------------------
+[2025-09-24 19:09:30,624][__main__][INFO] - MODEL TRAINING BEGINS...
+[2025-09-24 19:09:34,814][__main__][INFO] - Epoch 1 | train_loss: 1.4557 | train_accuracy: 0.2214 | val_loss: 1.4915 | val_accuracy: 0.1875 | LR: 0.000133
+[2025-09-24 19:09:38,515][__main__][INFO] - Epoch 2 | train_loss: 1.4609 | train_accuracy: 0.3047 | val_loss: 1.3684 | val_accuracy: 0.2656 | LR: 0.000267
+[2025-09-24 19:09:42,230][__main__][INFO] - Epoch 3 | train_loss: 1.4274 | train_accuracy: 0.2422 | val_loss: 1.3908 | val_accuracy: 0.1875 | LR: 0.000293
+[2025-09-24 19:09:45,927][__main__][INFO] - Epoch 4 | train_loss: 1.3998 | train_accuracy: 0.2786 | val_loss: 1.2570 | val_accuracy: 0.4688 | LR: 0.000264
+[2025-09-24 19:09:49,633][__main__][INFO] - Epoch 5 | train_loss: 1.4058 | train_accuracy: 0.2917 | val_loss: 1.2333 | val_accuracy: 0.4219 | LR: 0.000216
+[2025-09-24 19:09:53,330][__main__][INFO] - Epoch 6 | train_loss: 1.3614 | train_accuracy: 0.3255 | val_loss: 1.2745 | val_accuracy: 0.4844 | LR: 0.000158
+[2025-09-24 19:09:57,027][__main__][INFO] - Epoch 7 | train_loss: 1.3732 | train_accuracy: 0.3620 | val_loss: 1.3055 | val_accuracy: 0.5781 | LR: 0.000098
+[2025-09-24 19:10:00,715][__main__][INFO] - Epoch 8 | train_loss: 1.3300 | train_accuracy: 0.3828 | val_loss: 1.2864 | val_accuracy: 0.5156 | LR: 0.000047
+[2025-09-24 19:10:04,465][__main__][INFO] - Epoch 9 | train_loss: 1.3412 | train_accuracy: 0.3568 | val_loss: 1.2994 | val_accuracy: 0.5625 | LR: 0.000012
+[2025-09-24 19:10:08,181][__main__][INFO] - Epoch 10 | train_loss: 1.3249 | train_accuracy: 0.3802 | val_loss: 1.2987 | val_accuracy: 0.5625 | LR: 0.000000
+[2025-09-24 19:10:08,181][__main__][INFO] - Storing the training artifacts detials
+[2025-09-24 19:10:08,184][__main__][INFO] - WOrking on Training Plots...
+[2025-09-24 19:10:08,376][__main__][INFO] - Saved training plot to /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers (ViT) from scratch/outputs/2025-09-24/19-09-30/training_curves.png
+[2025-09-24 19:10:08,377][__main__][INFO] - 😎 Training Completed, details stored in /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers (ViT) from scratch/outputs/2025-09-24/19-09-30
