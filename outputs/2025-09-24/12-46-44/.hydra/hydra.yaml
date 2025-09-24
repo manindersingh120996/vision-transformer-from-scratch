@@ -143,7 +143,7 @@ hydra:
       schema: structured
       provider: schema
     output_dir: /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers
-      (ViT) from scratch/outputs/2025-09-22/18-36-56
+      (ViT) from scratch/outputs/2025-09-24/12-46-44
     choices:
       hydra/env: default
       hydra/callbacks: null

@@ -1,6 +1,6 @@
-[2025-09-22 18:44:45,512][__main__][INFO] - Current working directory: /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers (ViT) from scratch
-[2025-09-22 18:44:45,512][__main__][INFO] - --- Configuration ---
-[2025-09-22 18:44:45,512][__main__][INFO] - 
+[2025-09-24 12:46:44,439][__main__][INFO] - Current working directory: /Users/msingh361/Uber/Projects/Personal_projects/Vision Transformers (ViT) from scratch
+[2025-09-24 12:46:44,439][__main__][INFO] - --- Configuration ---
+[2025-09-24 12:46:44,439][__main__][INFO] - 
 model:
   in_channels: 3
   image_size: 224
@@ -15,18 +15,20 @@ model:
   number_of_classes: 4
 train:
   batch_size: 32
+  epochs: 10
   train_dataset_path: dataset_path/tom_and_jerry/subset/train
   test_dataset_path: dataset_path/tom_and_jerry/subset/test
 
-[2025-09-22 18:44:45,512][__main__][INFO] - ---------------------
-[2025-09-22 18:44:45,512][__main__][INFO] - Dataset Creation Begin
-[2025-09-22 18:44:45,515][__main__][INFO] -  Dataset Created 
-[2025-09-22 18:44:45,515][__main__][INFO] - Verifying consistency between config and dataset...
-[2025-09-22 18:44:45,515][__main__][INFO] - ✅ Verification successful.
-[2025-09-22 18:44:45,515][__main__][INFO] - Model Creation Begin
-[2025-09-22 18:44:45,585][__main__][INFO] - Model Creation Completed.
-[2025-09-22 18:44:45,888][__main__][INFO] - --- Model Summary ---
-[2025-09-22 18:44:46,203][__main__][INFO] - ===============================================================================================
+[2025-09-24 12:46:44,439][__main__][INFO] - ---------------------
+[2025-09-24 12:46:44,439][__main__][INFO] - Dataset Creation Begin
+[2025-09-24 12:46:44,442][__main__][INFO] -  Dataset Created 
+[2025-09-24 12:46:44,442][__main__][INFO] - Dataset Classes and Corresponding Labels : {'tom': 0, 'neither_tom_nor_jerry': 1, 'jerry': 2, 'both_tom_and_jerry': 3}
+[2025-09-24 12:46:44,442][__main__][INFO] - Verifying consistency between config and dataset...
+[2025-09-24 12:46:44,442][__main__][INFO] - ✅ Verification successful.
+[2025-09-24 12:46:44,442][__main__][INFO] - Model Creation Begin
+[2025-09-24 12:46:44,584][__main__][INFO] - Model Creation Completed.
+[2025-09-24 12:46:44,775][__main__][INFO] - --- Model Summary ---
+[2025-09-24 12:46:44,792][__main__][INFO] - ===============================================================================================
 Layer (type:depth-idx)                        Output Shape              Param #
 ===============================================================================================
 VisionTransformer                             [32, 4]                   --
@@ -56,4 +58,12 @@ Forward/backward pass size (MB): 865.01
 Params size (MB): 19.75
 Estimated Total Size (MB): 904.03
 ===============================================================================================
-[2025-09-22 18:44:46,204][__main__][INFO] - --------------------
+[2025-09-24 12:46:44,793][__main__][INFO] - --------------------
+[2025-09-24 12:46:44,794][__main__][INFO] - MODEL TRAINING BEGINS...
+[2025-09-24 12:46:49,519][__main__][INFO] - Epoch 1 | train_loss: 1.4883 | train_accuracy: 0.2292 | val_loss: 1.2551 | val_accuracy: 0.5312 | LR: 0.000133
+[2025-09-24 12:46:53,200][__main__][INFO] - Epoch 2 | train_loss: 1.5035 | train_accuracy: 0.2135 | val_loss: 1.2472 | val_accuracy: 0.5469 | LR: 0.000267
+[2025-09-24 12:46:56,854][__main__][INFO] - Epoch 3 | train_loss: 1.4371 | train_accuracy: 0.2786 | val_loss: 1.2919 | val_accuracy: 0.5000 | LR: 0.000293
+[2025-09-24 12:47:00,508][__main__][INFO] - Epoch 4 | train_loss: 1.4319 | train_accuracy: 0.2786 | val_loss: 1.2809 | val_accuracy: 0.5469 | LR: 0.000264
+[2025-09-24 12:47:04,200][__main__][INFO] - Epoch 5 | train_loss: 1.4268 | train_accuracy: 0.2422 | val_loss: 1.3148 | val_accuracy: 0.4219 | LR: 0.000216
+[2025-09-24 12:47:07,955][__main__][INFO] - Epoch 6 | train_loss: 1.3858 | train_accuracy: 0.2995 | val_loss: 1.3723 | val_accuracy: 0.5000 | LR: 0.000158
+[2025-09-24 12:47:11,649][__main__][INFO] - Epoch 7 | train_loss: 1.3757 | train_accuracy: 0.3047 | val_loss: 1.3829 | val_accuracy: 0.3281 | LR: 0.000098

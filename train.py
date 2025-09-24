@@ -99,7 +99,7 @@ def main_loop(cfg: DictConfig):
     test_input = torch.randn((cfg.train.batch_size,
                              cfg.model.in_channels,
                              cfg.model.image_size,
-                             cfg.model.image_size))
+                             cfg.model.image_size)).to(device)
     log.info("Model Creation Completed.")
     print(summary(vit_model,input_data= test_input))
     log.info("--- Model Summary ---")
