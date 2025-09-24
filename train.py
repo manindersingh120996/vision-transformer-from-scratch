@@ -189,6 +189,7 @@ def main_loop(cfg: DictConfig):
     val_loss = []
     n_train = len(train_data_loader)
     n_val = len(val_data_loader)
+    best_val_acc = 0.0
     for epoch in range(cfg.train.epochs):
         vit_model.train()
         loss_average = 0
@@ -247,6 +248,15 @@ def main_loop(cfg: DictConfig):
         f"train_loss: {epoch_avg_loss:.4f} | train_accuracy: {epoch_avg_accuracy:.4f} | "
         f"val_loss: {val_epoch_avg_loss:.4f} | val_accuracy: {val_epoch_avg_accuracy:.4f} | "
         f"LR: {scheduler.get_last_lr()[0]:.6f}")
+
+        # storing model for inference at later point of time===== model checkpointing ====
+        if val_epoch_avg_accuracy > best_val_acc:
+            best_val_acc = val_epoch_avg_accuracy
+            model_path = os.path.join(output_dir, "best_model.pt")
+            torch.save(vit_model.state_dict(), model_path)
+            log.info(f"New best model saved to {model_path} , with accuracy : {best_val_acc}")
+
+
     learning_rates.append(scheduler.get_last_lr()[0])
 
     log.info("Storing the training artifacts detials")
