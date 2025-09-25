@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader, Dataset
 import hydra
 from hydra.core.hydra_config import HydraConfig
 import os
+import json
 import pandas as pd
 import logging
 from omegaconf import DictConfig, OmegaConf
@@ -102,6 +103,8 @@ def main_loop(cfg: DictConfig):
     num_of_classes_in_dataset = len(train_dataset.classes)
     log.info(" Dataset Created ")
 
+
+
 #     assert num_of_classes_in_dataset == cfg.model.number_of_classes, \
 #         f"Total classes in Dataset Provided '{num_of_classes_in_dataset}'\
 #  Doesn't match with classes in configuration '{cfg.model.number_of_classes}' mentioned."
@@ -119,6 +122,14 @@ def main_loop(cfg: DictConfig):
         log.error(f"CONFIGURATION ERROR: {e}")
         import sys
         sys.exit(1)
+
+    log.info("Storing the index vs label mapping for the Current Dataset")
+    index_to_class = train_dataset.index_to_class
+    mapping_save_path = os.path.join(output_dir,"class_mapping.json")
+    with open(mapping_save_path,'w+') as f:
+        json.dump(index_to_class,f,indent=4)
+    log.info(f"Mapping saved at : {mapping_save_path}")
+
     
     
     log.info("Model Creation Begin")
