@@ -1,0 +1,2 @@
+- train.epochs=10
+- model.d_ff_scale_factor=2
