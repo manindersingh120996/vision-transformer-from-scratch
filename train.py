@@ -182,9 +182,9 @@ def main_loop(cfg: DictConfig):
     
     optimizer = optim.AdamW(
             vit_model.parameters(),
-            lr = 3e-4,
-            betas=(0.9,0.999),
-            weight_decay=0.1
+            lr = cfg.optimizer.lr,
+            betas=(cfg.optimizer.beta1,cfg.optimizer.beta2),
+            weight_decay=cfg.optimizer.weight_decay
         )
     criterion = nn.CrossEntropyLoss()
 

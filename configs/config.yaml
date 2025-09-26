@@ -21,8 +21,16 @@ model:
 train: 
   batch_size : 32
   epochs : 100
-  train_dataset_path : 'dataset_path/tom_and_jerry/train'
-  test_dataset_path : 'dataset_path/tom_and_jerry/test'
-  # train_dataset_path : 'dataset_path/tom_and_jerry/subset/train' #'dataset_path/tom_and_jerry/train'
-  # test_dataset_path : 'dataset_path/tom_and_jerry/subset/test' #'dataset_path/tom_and_jerry/test'
+  # train_dataset_path : 'dataset_path/tom_and_jerry/train'
+  # test_dataset_path : 'dataset_path/tom_and_jerry/test'
+  train_dataset_path : 'dataset_path/tom_and_jerry/subset/train'
+  test_dataset_path : 'dataset_path/tom_and_jerry/subset/test' 
+
+optimizer:
+  lr : 3e-4
+  weight_decay : 0.1
+  beta1 : 0.9
+  beta2 : 0.999
+
+  
 
